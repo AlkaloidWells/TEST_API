@@ -1,29 +1,30 @@
+<!-- registration.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register User</title>
-    <link rel="stylesheet" href="../static/css/index.css">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="../static/css/reg.css">
 </head>
 <body>
-    <header>
-        <h1>Register User</h1>
-    </header>
-    <main>
-        <form action="register_user" method="post">
+    <div class="container">
+        <h2>User Registration</h2>
+        <form id="registration-form">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <label for="role">Role:</label>
-            <select id="role" name="role">
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-                <option value="super_admin">Super Admin</option>
-            </select>
+            <input type="text" id="role" name="role" required>
+            <label for="image_path">Image Path:</label>
+            <input type="text" id="image_path" name="image_path">
             <button type="submit">Register</button>
         </form>
-    </main>
+        <p id="message"></p>
+    </div>
+
+    <script src="../static/js/reg.js"></script>
 </body>
 </html>
+

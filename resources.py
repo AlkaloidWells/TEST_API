@@ -1,4 +1,4 @@
-from flask import request
+from flask import redirect, request, url_for
 from flask import request, jsonify, session
 from flask_restful import Resource
 from models import User, admin_user, staff_user, Visitor, Vehicle
@@ -6,6 +6,17 @@ from functools import wraps
 from flask import abort
 from flask_login import current_user
 from extentions import db
+from PIL import Image
+import pytesseract
+
+
+# app.py
+
+ADMIN_DASHBOARD_URL = '/admin_dashboard'
+USER_DASHBOARD_URL = '/user_dashboard'
+SUPER_ADMIN_DASHBOARD_URL = '/super_admin_dashboard'
+STAFF_DASHBOARD_URL = '/staff_dashboard'
+
 
 
 def role_required(role):
@@ -263,3 +274,96 @@ class LoginResource(Resource):
                 return {'message': 'Staff logged in successfully', 'redirect_url': STAFF_DASHBOARD_URL}, 200
         else:
             return {'error': 'Invalid username or password'}, 401
+    
+
+class ViewUsersResource(Resource):
+    def get(self):
+        users = User.query.all()
+        user_list = [{'id': user.id, 'username': user.username, 'role': user.role, 'image_path': user.image_path} for user in users]
+        return jsonify(user_list), 200
+
+class ViewUserDetailResource(Resource):
+    def get(self, user_id):
+        user = User.query.get(user_id)
+        if user:
+            user_info = {'id': user.id, 'username': user.username, 'role': user.role, 'image_path': user.image_path}
+            return jsonify(user_info), 200
+        else:
+            return {'error': 'User not found'}, 404
+
+class ViewVehiclesResource(Resource):
+    def get(self):
+        vehicles = Vehicle.query.all()
+        vehicle_list = [{'id': vehicle.id, 'plate_number': vehicle.plate_number, 'make': vehicle.make, 'model': vehicle.model, 'color': vehicle.color} for vehicle in vehicles]
+        return jsonify(vehicle_list), 200
+
+class ViewVehicleDetailResource(Resource):
+    def get(self, vehicle_id):
+        vehicle = Vehicle.query.get(vehicle_id)
+        if vehicle:
+            vehicle_info = {'id': vehicle.id, 'plate_number': vehicle.plate_number, 'make': vehicle.make, 'model': vehicle.model, 'color': vehicle.color}
+            return jsonify(vehicle_info), 200
+        else:
+            return {'error': 'Vehicle not found'}, 404
+
+class ViewVisitorsResource(Resource):
+    def get(self):
+        visitors = Visitor.query.all()
+        visitor_list = [{'id': visitor.id, 'full_name': visitor.full_name, 'id_card_number': visitor.id_card_number, 'date_of_birth': visitor.date_of_birth} for visitor in visitors]
+        return jsonify(visitor_list), 200
+
+class ViewVisitorDetailResource(Resource):
+    def get(self, visitor_id):
+        visitor = Visitor.query.get(visitor_id)
+        if visitor:
+            visitor_info = {'id': visitor.id, 'full_name': visitor.full_name, 'id_card_number': visitor.id_card_number, 'date_of_birth': visitor.date_of_birth}
+            return jsonify(visitor_info), 200
+        else:
+            return {'error': 'Visitor not found'}, 404
+
+
+
+class UpdateVisitorByOCRResource(Resource):
+    @login_required
+    @role_required('user')
+    def post(self):
+        # Ensure that the request contains a file
+        if 'file' not in request.files:
+            return {'error': 'No file provided'}, 400
+
+        file = request.files['file']
+
+        # Ensure that the file is an image
+        if file.filename == '':
+            return {'error': 'No file selected'}, 400
+        if file and allowed_file(file.filename):
+            try:
+                # Read the image file and perform OCR using Tesseract
+                image = Image.open(file)
+                text = pytesseract.image_to_string(image)
+
+                # Extract relevant information from OCR result
+                # For example, assuming OCR result contains username and password
+                # You may need to adjust this based on your OCR result format
+                username, password = process_ocr_result(text)
+
+                # Update user information in the database
+                user = User.query.filter_by(username=username).first()
+                if user:
+                    user.set_password(password)  # Assuming password update is required
+                    db.session.commit()
+                    return {'message': 'User information updated by OCR scan'}, 200
+                else:
+                    return {'error': 'User not found'}, 404
+            except Exception as e:
+                return {'error': str(e)}, 500
+        else:
+            return {'error': 'Unsupported file type'}, 400
+
+
+
+class UpdateVisitorByOCRResource(Resource):
+    def post(self):
+        # Process OCR scan and update visitor information
+        # Replace this with your OCR processing logic
+        return {'message': 'Visitor information updated by OCR scan'}, 200

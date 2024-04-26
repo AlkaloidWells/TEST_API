@@ -31,18 +31,18 @@ class User(db.Model):
 
 class admin_user(User):
     __tablename__ = 'admin_user'
-    company_name = db.Column(db.String(100), nullable=False)
-    reg_no = db.Column(db.String(20), nullable=False)
-    founded_date = db.Column(db.Date, nullable=False)
-    address = db.Column(db.String(200), nullable=False)
+    company_name = db.Column(db.String(100))
+    reg_no = db.Column(db.String(20))
+    founded_date = db.Column(db.Date)
+    address = db.Column(db.String(200))
     
 
 
 class staff_user(User):  # Ensure StaffUser inherits from User
     __tablename__ = 'staff_user'  # Specify the table name explicitly
-    full_name = db.Column(db.String(100), nullable=False)
-    date_emp = db.Column(db.Date, nullable=False)
-    staff_address = db.Column(db.String(200), nullable=False)
+    full_name = db.Column(db.String(100))
+    date_emp = db.Column(db.Date)
+    staff_address = db.Column(db.String(200))
 
 class Visitor(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -22,7 +22,7 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('login.html')
 
 api = Api(app)
 
@@ -49,6 +49,16 @@ api.add_resource(VehicleDetailResource, '/api/vehicles/<int:vehicle_id>')
 
 # Login API
 api.add_resource(LoginResource, '/api/login')
+
+api.add_resource(ViewUsersResource, '/api/view_users')
+api.add_resource(ViewUserDetailResource, '/api/view_users/<int:user_id>')
+api.add_resource(ViewVehiclesResource, '/api/view_vehicles')
+api.add_resource(ViewVehicleDetailResource, '/api/view_vehicles/<int:vehicle_id>')
+api.add_resource(ViewVisitorsResource, '/api/view_visitors')
+api.add_resource(ViewVisitorDetailResource, '/api/view_visitors/<int:visitor_id>')
+api.add_resource(UpdateUserByOCRResource, '/api/update_user_by_ocr')
+api.add_resource(UpdateVisitorByOCRResource, '/api/update_visitor_by_ocr')
+
 
 
 if __name__ == '__main__':
