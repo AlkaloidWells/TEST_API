@@ -1,31 +1,17 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.exc import IntegrityError
-from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
-from functools import wraps
-from flask import abort
-import os
-from flask import Flask
+from flask import Flask, render_template
 from flask_restful import Api
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from resources import *
-
-basedir = os.path.abspath(os.path.dirname(__file__))
+from extensions import db, migrate
+from config import Config
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db', 'database.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = '8IR4M7-R3c74GjTHhKzWODaYVHuPGqn4w92DHLqeYJA'
+app.config.from_object(Config)
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-# Import models here as to avoid circular import issue
+db.init_app(app)
+migrate.init_app(app, db)
 
+# Import models to ensure they are registered with SQLAlchemy
 from models import *
-with app.app_context():
-    init_db()
-
 
 @app.route('/')
 def index():

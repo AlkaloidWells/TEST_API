@@ -1,7 +1,17 @@
 import os
-from app import db
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, render_template
+from flask_restful import Api
+from resources import *
+from extensions import db, migrate
+from config import Config
 
+app = Flask(__name__)
+app.config.from_object(Config)
+
+db.init_app(app)
+migrate.init_app(app, db)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
