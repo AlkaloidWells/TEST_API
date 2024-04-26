@@ -1,8 +1,8 @@
-Apologies for the oversight. Let's expand the README with detailed API documentation and usage instructions:
+
 
 ---
 
-# Project Name
+# VVIMS
 
 Short project description here.
 
@@ -45,8 +45,8 @@ List the technologies/frameworks/libraries used in the project.
 Provide instructions for setting up the project locally.
 
 1. Clone the repository: `git clone https://github.com/username/repository.git`
-2. Navigate to the project directory: `cd project-directory`
-3. Install dependencies: `pip install -r requirements.txt`
+2. Navigate to the project directory: `cd TEST_API`
+3. Install dependencies: `pip3 install -r requirements.txt`
 4. Run migrations: `flask db upgrade`
 5. Start the server: `flask run`
 
