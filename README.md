@@ -193,8 +193,61 @@ Describe the structure of the database tables.
 
 Explain how to use the APIs in the frontend application.
 
-```javascript
-// Example JavaScript code to interact with the APIs
+```Front-ENd 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Frontend</title>
+</head>
+<body>
+    <h1>User Registration Form</h1>
+    <form id="userForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <label for="role">Role:</label>
+        <select id="role" name="role">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
+        </select><br>
+        <label for="imagePath">Image Path:</label>
+        <input type="text" id="imagePath" name="imagePath"><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/users', {
+                method: 'POST',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error registering user');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('User registered successfully');
+                // Additional handling or redirection after successful registration
+            })
+            .catch(error => {
+                alert('An error occurred: ' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>
+
 ```
 
 ## Contributing
