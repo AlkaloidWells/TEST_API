@@ -1,8 +1,34 @@
 from flask import request
 from flask import request, jsonify, session
 from flask_restful import Resource
-from models import User, admin_user, staff_user, Visitor, Vir
+from models import User, admin_user, staff_user, Visitor, Vehicle
+from functools import wraps
+from flask import abort
+from flask_login import current_user
 
+
+def role_required(role):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            # Check if user has the required role
+            if not current_user.has_role(role):
+                # Abort with 403 Forbidden error if user does not have the required role
+                abort(403)
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Check if user is logged in
+        if not current_user.is_authenticated:
+            # Redirect to login page
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 class UserResource(Resource):
@@ -23,6 +49,8 @@ class UserResource(Resource):
 
 
 class UserDetailResource(Resource):
+    @login_required
+    @role_required('super_admin')
     def delete(self, user_id):
         user = User.query.get(user_id)
         if user:
@@ -34,6 +62,9 @@ class UserDetailResource(Resource):
 
 
 class VisitorResource(Resource):
+
+    @login_required
+    @role_required('user')
     def post(self):
         data = request.get_json()
         # Extract data from JSON and create Visitor instance
@@ -46,6 +77,8 @@ class VisitorResource(Resource):
 
 
 class VisitorDetailResource(Resource):
+    @login_required
+    @role_required('user')
     def put(self, visitor_id):
         data = request.get_json()
         visitor = Visitor.query.get(visitor_id)
@@ -58,8 +91,11 @@ class VisitorDetailResource(Resource):
             return {'message': 'Visitor updated successfully'}, 200
         else:
             return {'error': 'Visitor not found'}, 404
-
+        
+    @login_required
+    @role_required('user')
     def delete(self, visitor_id):
+        
         visitor = Visitor.query.get(visitor_id)
         if visitor:
             db.session.delete(visitor)
@@ -70,6 +106,8 @@ class VisitorDetailResource(Resource):
 
 
 class VehicleResource(Resource):
+    @login_required
+    @role_required('user')
     def post(self):
         data = request.get_json()
         # Extract data from JSON and create Vehicle instance
@@ -82,6 +120,8 @@ class VehicleResource(Resource):
 
 
 class VehicleDetailResource(Resource):
+    @login_required
+    @role_required('super')
     def put(self, vehicle_id):
         data = request.get_json()
         vehicle = Vehicle.query.get(vehicle_id)
@@ -95,6 +135,8 @@ class VehicleDetailResource(Resource):
         else:
             return {'error': 'Vehicle not found'}, 404
 
+    @login_required
+    @role_required('user')
     def delete(self, vehicle_id):
         vehicle = Vehicle.query.get(vehicle_id)
         if vehicle:
@@ -106,6 +148,8 @@ class VehicleDetailResource(Resource):
 
 
 class AdminUserResource(Resource):
+    @login_required
+    @role_required('super_admin')
     def post(self):
         data = request.get_json()
         username = data.get('username')
@@ -130,6 +174,8 @@ class AdminUserResource(Resource):
 
 
 class AdminUserDetailResource(Resource):
+    @login_required
+    @role_required('super_admin')
     def delete(self, user_id):
         admin_user = AdminUser.query.get(user_id)
         if admin_user:
@@ -141,6 +187,8 @@ class AdminUserDetailResource(Resource):
 
 
 class StaffUserResource(Resource):
+    @login_required
+    @role_required('admin')
     def post(self):
         data = request.get_json()
         username = data.get('username')
@@ -164,6 +212,8 @@ class StaffUserResource(Resource):
 
 
 class StaffUserDetailResource(Resource):
+    @login_required
+    @role_required('admin')
     def delete(self, user_id):
         staff_user = StaffUser.query.get(user_id)
         if staff_user:
