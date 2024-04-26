@@ -5,6 +5,7 @@ from models import User, admin_user, staff_user, Visitor, Vehicle
 from functools import wraps
 from flask import abort
 from flask_login import current_user
+from extentions import db
 
 
 def role_required(role):
@@ -67,8 +68,16 @@ class VisitorResource(Resource):
     @role_required('user')
     def post(self):
         data = request.get_json()
-        # Extract data from JSON and create Visitor instance
-        new_visitor = Visitor(**data)
+        new_visitor = Visitor(
+            full_name=data['full_name'],
+            id_card_number=data['id_card_number'],
+            date_of_birth=data['date_of_birth'],
+            address=data['address'],
+            contact_details=data['contact_details'],
+            purpose_of_visit=data['purpose_of_visit'],
+            time_in=data['time_in'],
+            badge_issued=data['badge_issued']
+        )
 
         db.session.add(new_visitor)
         db.session.commit()
@@ -110,8 +119,16 @@ class VehicleResource(Resource):
     @role_required('user')
     def post(self):
         data = request.get_json()
-        # Extract data from JSON and create Vehicle instance
-        new_vehicle = Vehicle(**data)
+        new_vehicle = Vehicle(
+            plate_number=data['plate_number'],
+            make=data['make'],
+            model=data['model'],
+            color=data['color'],
+            owner_details=data['owner_details'],
+            entry_time=data['entry_time'],
+            exit_time=data.get('exit_time'),  # It's optional, so use get() method
+            flagged_as_suspicious=data.get('flagged_as_suspicious', False)  # Default to False if not provided
+        )
 
         db.session.add(new_vehicle)
         db.session.commit()
@@ -162,7 +179,7 @@ class AdminUserResource(Resource):
         address = data.get('address')
         contact_details = data.get('contact_details')
 
-        new_admin_user = AdminUser(username=username, role=role, image_path=image_path,
+        new_admin_user = admin_user(username=username, role=role, image_path=image_path,
                                    company_name=company_name, reg_no=reg_no, founded_date=founded_date,
                                    address=address, contact_details=contact_details)
         new_admin_user.set_password(password)
@@ -177,7 +194,7 @@ class AdminUserDetailResource(Resource):
     @login_required
     @role_required('super_admin')
     def delete(self, user_id):
-        admin_user = AdminUser.query.get(user_id)
+        admin_user = admin_user.query.get(user_id)
         if admin_user:
             db.session.delete(admin_user)
             db.session.commit()
@@ -197,11 +214,11 @@ class StaffUserResource(Resource):
         image_path = data.get('image_path')
         full_name = data.get('full_name')
         date_emp = data.get('date_emp')
-        address = data.get('address')
+        staff_address = data.get('address')
         contact_details = data.get('contact_details')
 
-        new_staff_user = StaffUser(username=username, role=role, image_path=image_path,
-                                   full_name=full_name, date_emp=date_emp, address=address,
+        new_staff_user = staff_user(username=username, role=role, image_path=image_path,
+                                   full_name=full_name, date_emp=date_emp, address=staff_address,
                                    contact_details=contact_details)
         new_staff_user.set_password(password)
 
@@ -215,7 +232,7 @@ class StaffUserDetailResource(Resource):
     @login_required
     @role_required('sadmin')
     def delete(self, user_id):
-        staff_user = StaffUser.query.get(user_id)
+        staff_user = staff_user.query.get(user_id)
         if staff_user:
             db.session.delete(staff_user)
             db.session.commit()

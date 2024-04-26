@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_restful import Api
 from resources import *
-from extensions import db, migrate
+from extentions import db, migrate
 from config import Config
 
 app = Flask(__name__)

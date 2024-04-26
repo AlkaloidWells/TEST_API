@@ -4,8 +4,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template
 from flask_restful import Api
 from resources import *
-from extensions import db, migrate
+from extentions import db, migrate
 from config import Config
+# Import db from the app module
+
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -27,19 +30,19 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
 class admin_user(User):
+    __tablename__ = 'admin_user'
     company_name = db.Column(db.String(100), nullable=False)
     reg_no = db.Column(db.String(20), nullable=False)
     founded_date = db.Column(db.Date, nullable=False)
     address = db.Column(db.String(200), nullable=False)
-    contact_details = db.Column(db.String(50), nullable=False)
+    
 
 
-class staff_user(User):
-    id = db.Column(db.Integer, primary_key=True)
+class staff_user(User):  # Ensure StaffUser inherits from User
+    __tablename__ = 'staff_user'  # Specify the table name explicitly
     full_name = db.Column(db.String(100), nullable=False)
     date_emp = db.Column(db.Date, nullable=False)
-    address = db.Column(db.String(200), nullable=False)
-    contact_details = db.Column(db.String(50), nullable=False)
+    staff_address = db.Column(db.String(200), nullable=False)
 
 class Visitor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
