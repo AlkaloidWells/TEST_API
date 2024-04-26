@@ -10,8 +10,15 @@ app.config.from_object(Config)
 db.init_app(app)
 migrate.init_app(app, db)
 
-# Import models to ensure they are registered with SQLAlchemy
+
 from models import *
+
+
+# Import models to ensure they are registered with SQLAlchemy
+with app.app_context():
+    init_db()
+
+
 
 @app.route('/')
 def index():
