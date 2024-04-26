@@ -213,7 +213,7 @@ class StaffUserResource(Resource):
 
 class StaffUserDetailResource(Resource):
     @login_required
-    @role_required('admin')
+    @role_required('sadmin')
     def delete(self, user_id):
         staff_user = StaffUser.query.get(user_id)
         if staff_user:

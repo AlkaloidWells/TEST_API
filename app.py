@@ -33,7 +33,8 @@ def index():
 
 api = Api(app)
 
-# User APIs
+
+
 api.add_resource(UserResource, '/api/users')
 api.add_resource(UserDetailResource, '/api/users/<int:user_id>')
 
@@ -52,6 +53,9 @@ api.add_resource(VisitorDetailResource, '/api/visitors/<int:visitor_id>')
 # Vehicle APIs
 api.add_resource(VehicleResource, '/api/vehicles')
 api.add_resource(VehicleDetailResource, '/api/vehicles/<int:vehicle_id>')
+
+# Login API
+api.add_resource(LoginResource, '/api/login')
 
 
 if __name__ == '__main__':
