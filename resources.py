@@ -7,6 +7,7 @@ from flask import abort
 from flask_login import current_user
 from extentions import db
 from PIL import Image
+from Modules.ocr.ocr import *
 import pytesseract
 
 
@@ -362,7 +363,7 @@ class UpdateVisitorByOCRResource(Resource):
 
 
 
-class UpdateVisitorByOCRResource(Resource):
+class UpdateViruleByOCRResource(Resource):
     def post(self):
         # Process OCR scan and update visitor information
         # Replace this with your OCR processing logic
