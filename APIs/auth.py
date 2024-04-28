@@ -44,9 +44,10 @@ class UserResource(Resource):
         username = data.get('username')
         password = data.get('password')
         role = data.get('role')
-        image_path = data.get('image_path')
 
-        new_user = User(username=username, role=role, image_path=image_path)
+
+
+        new_user = User(username=username, role=role)
         new_user.set_password(password)
 
         db.session.add(new_user)

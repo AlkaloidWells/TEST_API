@@ -20,14 +20,24 @@ class AdminUserResource(Resource):
         role = 'admin'  # Fixed role for admin users
         image_path = data.get('image_path')
         company_name = data.get('company_name')
-        reg_no = data.get('reg_no')
-        founded_date = data.get('founded_date')
-        address = data.get('address')
-        contact_details = data.get('contact_details')
+        tax_number = data.get('tax_number')
+        industry = data.get('industry')
+        company_size = data.get('company_size')
+        company_tel = data.get('company_tel')
+        company_email = data.get('company_email')
+        company_gps = data.get('company_gps')
+        company_address = data.get('company_address')
+        managed_by = data.get('managed_by')
+        manager_role = data.get('manager_role')
+        manager_tel = data.get('manager_tel')
+        manager_email = data.get('manager_email')
 
         new_admin_user = admin_user(username=username, role=role, image_path=image_path,
-                                   company_name=company_name, reg_no=reg_no, founded_date=founded_date,
-                                   address=address, contact_details=contact_details)
+                                    company_name=company_name, tax_number=tax_number, industry=industry,
+                                    company_size=company_size, company_tel=company_tel, company_email=company_email,
+                                    Company_gps=company_gps, company_address=company_address,
+                                    managed_by=managed_by, manager_role=manager_role,
+                                    manager_tel=manager_tel, manager_email=manager_email)
         new_admin_user.set_password(password)
 
         db.session.add(new_admin_user)

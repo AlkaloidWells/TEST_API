@@ -16,15 +16,26 @@ class VisitorResource(Resource):
     @role_required('user')
     def post(self):
         data = request.get_json()
+        com_no = data.get('com_no')  # Add company tax_number
+        full_name = data.get('full_name')
+        id_card_number = data.get('id_card_number')
+        date_of_birth = data.get('date_of_birth')
+        address = data.get('address')
+        contact_details = data.get('contact_details')
+        purpose_of_visit = data.get('purpose_of_visit')
+        time_in = data.get('time_in')
+        badge_issued = data.get('badge_issued')
+
         new_visitor = Visitor(
-            full_name=data['full_name'],
-            id_card_number=data['id_card_number'],
-            date_of_birth=data['date_of_birth'],
-            address=data['address'],
-            contact_details=data['contact_details'],
-            purpose_of_visit=data['purpose_of_visit'],
-            time_in=data['time_in'],
-            badge_issued=data['badge_issued']
+            com_no=com_no,
+            full_name=full_name,
+            id_card_number=id_card_number,
+            date_of_birth=date_of_birth,
+            address=address,
+            contact_details=contact_details,
+            purpose_of_visit=purpose_of_visit,
+            time_in=time_in,
+            badge_issued=badge_issued
         )
 
         db.session.add(new_visitor)

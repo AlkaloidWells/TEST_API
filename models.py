@@ -19,7 +19,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), nullable=False)
-    image_path = db.Column(db.String(20), nullable=True)
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -37,22 +37,34 @@ class User(db.Model):
 
 class admin_user(User):
     __tablename__ = 'admin_user'
-    company_name = db.Column(db.String(100))
-    reg_no = db.Column(db.String(20))
-    founded_date = db.Column(db.Date)
-    address = db.Column(db.String(200))
-    
+    company_name = db.Column(db.String(100),nullable=False)
+    tax_number = db.Column(db.String(20), unique=True, nullable=False)
+    industry = db.Column(db.String(100), nullable=False)
+    company_size = db.Column(db.Integer(100), nullable=False)
+    company_tel = db.Column(db.String(100), nullable=False)
+    company_email = db.Column(db.String(100), nullable=False)
+    Company_gps = db.Column(db.String(100))
+    company_address = db.Column(db.String(200))
+    managed_by  = db.Column(db.String(200))
+    manager_role = db.Column(db.String(200))
+    manager_tel = db.Column(db.String(200))
+    manager_email = db.Column(db.String(200))
 
 
 class staff_user(User):  # Ensure StaffUser inherits from User
     __tablename__ = 'staff_user'  # Specify the table name explicitly
-    reg_no = reg_no = db.Column(db.String(20))
-    full_name = db.Column(db.String(100))
-    date_emp = db.Column(db.Date)
-    staff_address = db.Column(db.String(200))
+    com_no = db.Column(db.String(20)) #company tax_number
+    full_name = db.Column(db.String(200))
+    staff_email = db.Column(db.String(200))
+    staff_social_link = db.Column(db.String(200))
+    staff_role = db.Column(db.String(200))
+    staff_home_address = db.Column(db.String(200))
+    staff_department = db.Column(db.String(200))
+    image_path = db.Column(db.String(20), nullable=True)
 
 class Visitor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    com_no = db.Column(db.String(20)) #company tax_number
     full_name = db.Column(db.String(100), nullable=False)
     id_card_number = db.Column(db.String(20), nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)
@@ -72,6 +84,7 @@ class Visitor(db.Model):
 
 class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    com_no = db.Column(db.String(20)) #company tax_number
     plate_number = db.Column(db.String(20), nullable=False)
     make = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(50), nullable=False)

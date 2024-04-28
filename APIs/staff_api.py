@@ -19,19 +19,24 @@ class StaffUserResource(Resource):
         role = 'staff'  # Fixed role for staff users
         image_path = data.get('image_path')
         full_name = data.get('full_name')
-        date_emp = data.get('date_emp')
-        staff_address = data.get('address')
-        contact_details = data.get('contact_details')
+        com_no = data.get('com_no')
+        staff_email = data.get('staff_email')
+        staff_social_link = data.get('staff_social_link')
+        staff_role = data.get('staff_role')
+        staff_home_address = data.get('staff_home_address')
+        staff_department = data.get('staff_department')
 
         new_staff_user = staff_user(username=username, role=role, image_path=image_path,
-                                   full_name=full_name, date_emp=date_emp, address=staff_address,
-                                   contact_details=contact_details)
+                                    full_name=full_name, com_no=com_no, staff_email=staff_email,
+                                    staff_social_link=staff_social_link, staff_role=staff_role,
+                                    staff_home_address=staff_home_address, staff_department=staff_department)
         new_staff_user.set_password(password)
 
         db.session.add(new_staff_user)
         db.session.commit()
 
         return {'message': 'Staff user created successfully'}, 201
+
 
 
 class StaffUserDetailResource(Resource):

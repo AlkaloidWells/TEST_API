@@ -12,15 +12,26 @@ class VehicleResource(Resource):
     @role_required('user')
     def post(self):
         data = request.get_json()
+        com_no = data.get('com_no')
+        plate_number = data.get('plate_number')
+        make = data.get('make')
+        model = data.get('model')
+        color = data.get('color')
+        owner_details = data.get('owner_details')
+        entry_time = data.get('entry_time')
+        exit_time = data.get('exit_time')
+        flagged_as_suspicious = data.get('flagged_as_suspicious', False)
+
         new_vehicle = Vehicle(
-            plate_number=data['plate_number'],
-            make=data['make'],
-            model=data['model'],
-            color=data['color'],
-            owner_details=data['owner_details'],
-            entry_time=data['entry_time'],
-            exit_time=data.get('exit_time'),  # It's optional, so use get() method
-            flagged_as_suspicious=data.get('flagged_as_suspicious', False)  # Default to False if not provided
+            com_no=com_no,
+            plate_number=plate_number,
+            make=make,
+            model=model,
+            color=color,
+            owner_details=owner_details,
+            entry_time=entry_time,
+            exit_time=exit_time,
+            flagged_as_suspicious=flagged_as_suspicious
         )
 
         db.session.add(new_vehicle)
