@@ -40,7 +40,7 @@ class admin_user(User):
     company_name = db.Column(db.String(100),nullable=False)
     tax_number = db.Column(db.String(20), unique=True, nullable=False)
     industry = db.Column(db.String(100), nullable=False)
-    company_size = db.Column(db.Integer(100), nullable=False)
+    company_size = db.Column(db.Integer, nullable=False)
     company_tel = db.Column(db.String(100), nullable=False)
     company_email = db.Column(db.String(100), nullable=False)
     Company_gps = db.Column(db.String(100))
@@ -66,7 +66,7 @@ class Visitor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     com_no = db.Column(db.String(20)) #company tax_number
     full_name = db.Column(db.String(100), nullable=False)
-    id_card_number = db.Column(db.String(20), nullable=False)
+    id_card_number = db.Column(db.Integer, nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)
     address = db.Column(db.String(200), nullable=False)
     contact_details = db.Column(db.String(50), nullable=False)
