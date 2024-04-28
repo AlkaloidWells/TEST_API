@@ -1,6 +1,10 @@
 from flask import Flask, render_template
 from flask_restful import Api
-from resources import *
+from APIs.admin_api import *
+from APIs.staff_api import *
+from APIs.vircule_api import *
+from APIs.visitor_api import *
+from APIs.auth import *
 from extentions import db, migrate
 from config import Config
 
@@ -22,7 +26,7 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('register_user.html')
 
 api = Api(app)
 
