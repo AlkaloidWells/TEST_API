@@ -5,7 +5,7 @@ from models import admin_user
 from extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
-from APIs.auth import login_required, role_required
+from API.auth import login_required, role_required
 
 
 

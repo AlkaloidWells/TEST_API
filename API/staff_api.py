@@ -5,7 +5,7 @@ from models import staff_user
 from extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
-from APIs.auth import login_required, role_required , get_user_id, get_tax_number
+from API.auth import login_required, role_required , get_user_id, get_tax_number
 
 
 class StaffUserResource(Resource):

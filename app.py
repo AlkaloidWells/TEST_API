@@ -1,10 +1,10 @@
 from flask import Flask, render_template
 from flask_restful import Api
-from APIs.admin_api import *
-from APIs.staff_api import *
-from APIs.vircule_api import *
-from APIs.visitor_api import *
-from APIs.auth import *
+from API.admin_api import *
+from API.staff_api import *
+from API.vircule_api import *
+from API.visitor_api import *
+from API.auth import *
 from extentions import db, migrate
 from config import Config
 

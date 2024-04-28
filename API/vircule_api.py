@@ -5,7 +5,7 @@ from models import  Vehicle
 from extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
-from APIs.auth import login_required, role_required, get_user_id, get_com_no
+from API.auth import login_required, role_required, get_user_id, get_com_no
 
 class VehicleResource(Resource):
     @login_required
