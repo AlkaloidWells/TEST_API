@@ -159,9 +159,7 @@ Provide instructions for setting up the project locally.
 - **Endpoint:** `/api/vehicles`
   - **Method:** POST
   - **Description:** Registers a new vehicle.
-  - **Parameters:** JSON data
-
- containing vehicle information.
+  - **Parameters:** JSON data containing vehicle information.
   - **Response:** Message indicating successful vehicle registration or error message.
 
 #### Update Vehicle
@@ -179,7 +177,70 @@ Provide instructions for setting up the project locally.
   - **Description:** Deletes a vehicle with the specified vehicle ID.
   - **Response:** Message indicating successful vehicle deletion or error message.
 
-## Database Structure
+### View Users API
+
+#### View All Users
+
+- **Endpoint:** `/api/view_users`
+  - **Method:** GET
+  - **Description:** Retrieves information about all users.
+  - **Response:** JSON data containing information about all users.
+
+#### View User Detail
+
+- **Endpoint:** `/api/view_users/<int:user_id>`
+  - **Method:** GET
+  - **Description:** Retrieves detailed information about a specific user.
+  - **Response:** JSON data containing information about the specified user.
+
+### View Vehicles API
+
+#### View All Vehicles
+
+- **Endpoint:** `/api/view_vehicles`
+  - **Method:** GET
+  - **Description:** Retrieves information about all vehicles.
+  - **Response:** JSON data containing information about all vehicles.
+
+#### View Vehicle Detail
+
+- **Endpoint:** `/api/view_vehicles/<int:vehicle_id>`
+  - **Method:** GET
+  - **Description:** Retrieves detailed information about a specific vehicle.
+  - **Response:** JSON data containing information about the specified vehicle.
+
+### View Visitors API
+
+#### View All Visitors
+
+- **Endpoint:** `/api/view_visitors`
+  - **Method:** GET
+  - **Description:** Retrieves information about all visitors.
+  - **Response:** JSON data containing information about all visitors.
+
+#### View Visitor Detail
+
+- **Endpoint:** `/api/view_visitors/<int:visitor_id>`
+  - **Method:** GET
+  - **Description:** Retrieves detailed information about a specific visitor.
+  - **Response:** JSON data containing information about the specified visitor.
+
+### Update User Information by OCR Scan
+
+- **Endpoint:** `/api/update_user_by_ocr`
+  - **Method:** POST
+  - **Description:** Updates user information using OCR scan.
+  - **Parameters:** Image file containing user information.
+  - **Response:** Message indicating successful user information update or error message.
+
+### Update Visitor Information by OCR Scan
+
+- **Endpoint:** `/api/update_visitor_by_ocr`
+  - **Method:** POST
+  - **Description:** Updates visitor information using OCR scan.
+  - **Parameters:** Image file containing visitor information.
+  - **Response:** Message indicating successful visitor information update or error message.
+
 
 Describe the structure of the database tables.
 
