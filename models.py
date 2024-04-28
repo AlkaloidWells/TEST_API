@@ -37,12 +37,12 @@ class User(db.Model):
 
 class admin_user(User):
     __tablename__ = 'admin_user'
-    company_name = db.Column(db.String(100),nullable=False)
-    tax_number = db.Column(db.String(20), unique=True, nullable=False)
-    industry = db.Column(db.String(100), nullable=False)
-    company_size = db.Column(db.Integer, nullable=False)
-    company_tel = db.Column(db.String(100), nullable=False)
-    company_email = db.Column(db.String(100), nullable=False)
+    company_name = db.Column(db.String(100))
+    tax_number = db.Column(db.String(20), unique=True)
+    industry = db.Column(db.String(100))
+    company_size = db.Column(db.Integer)
+    company_tel = db.Column(db.String(100))
+    company_email = db.Column(db.String(100))
     Company_gps = db.Column(db.String(100))
     company_address = db.Column(db.String(200))
     managed_by  = db.Column(db.String(200))
@@ -60,7 +60,7 @@ class staff_user(User):  # Ensure StaffUser inherits from User
     staff_role = db.Column(db.String(200))
     staff_home_address = db.Column(db.String(200))
     staff_department = db.Column(db.String(200))
-    image_path = db.Column(db.String(20), nullable=True)
+    image_path = db.Column(db.String(20))
 
 class Visitor(db.Model):
     id = db.Column(db.Integer, primary_key=True)

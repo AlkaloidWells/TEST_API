@@ -26,7 +26,7 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    return render_template('register_user.html')
+    return render_template('login.html')
 
 api = Api(app)
 

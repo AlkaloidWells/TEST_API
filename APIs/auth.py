@@ -66,8 +66,12 @@ class UserResource(Resource):
         password = data.get('password')
         role = data.get('role')
 
+        # Check if the username already exists
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            return {'error': 'Username already exists'}, 400
 
-
+        # If the username is unique, create the new user
         new_user = User(username=username, role=role)
         new_user.set_password(password)
 
@@ -75,6 +79,7 @@ class UserResource(Resource):
         db.session.commit()
 
         return {'message': 'User created successfully'}, 201
+
 
 
 class UserDetailResource(Resource):

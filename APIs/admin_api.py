@@ -32,6 +32,10 @@ class AdminUserResource(Resource):
         manager_tel = data.get('manager_tel')
         manager_email = data.get('manager_email')
 
+        existing_user = admin_user.query.filter_by(username=username).first()
+        if existing_user:
+            return {'error': 'Username already exists'}, 400
+
         new_admin_user = admin_user(username=username, role=role, image_path=image_path,
                                     company_name=company_name, tax_number=tax_number, industry=industry,
                                     company_size=company_size, company_tel=company_tel, company_email=company_email,
