@@ -250,6 +250,68 @@ Describe the structure of the database tables.
   - Fields: id, username, password_hash, role, image_path, company_name, reg_no, founded_date, address, contact_details
 - ...
 
+**EndPoins**
+
+### User Management
+- **POST /api/users**: Create a new user.
+- **GET /api/users**: Retrieve all users.
+- **GET /api/users/<user_id>**: Retrieve details of a specific user.
+- **PUT /api/users/<user_id>**: Update user details.
+- **DELETE /api/users/<user_id>**: Delete a user.
+
+### Admin User Management
+- **POST /api/admin_users**: Create a new admin user.
+- **GET /api/admin_users**: Retrieve all admin users.
+- **GET /api/admin_users/<user_id>**: Retrieve details of a specific admin user.
+- **PUT /api/admin_users/<user_id>**: Update admin user details.
+- **DELETE /api/admin_users/<user_id>**: Delete an admin user.
+
+### Staff User Management
+- **POST /api/staff_users**: Create a new staff user.
+- **GET /api/staff_users**: Retrieve all staff users.
+- **GET /api/staff_users/<user_id>**: Retrieve details of a specific staff user.
+- **PUT /api/staff_users/<user_id>**: Update staff user details.
+- **DELETE /api/staff_users/<user_id>**: Delete a staff user.
+
+### Visitor Management
+- **POST /api/visitors**: Create a new visitor.
+- **GET /api/visitors**: Retrieve all visitors.
+- **GET /api/visitors/<visitor_id>**: Retrieve details of a specific visitor.
+- **PUT /api/visitors/<visitor_id>**: Update visitor details.
+- **DELETE /api/visitors/<visitor_id>**: Delete a visitor.
+
+### Vehicle Management
+- **POST /api/vehicles**: Register a new vehicle.
+- **GET /api/vehicles**: Retrieve all vehicles.
+- **GET /api/vehicles/<vehicle_id>**: Retrieve details of a specific vehicle.
+- **PUT /api/vehicles/<vehicle_id>**: Update vehicle details.
+- **DELETE /api/vehicles/<vehicle_id>**: Delete a vehicle.
+
+### Authentication
+- **POST /api/login**: Authenticate user login.
+
+### View Details
+- **GET /api/view/users**: Retrieve all users.
+- **GET /api/view/users/<user_id>**: Retrieve details of a specific user.
+- **GET /api/view/vehicles**: Retrieve all vehicles.
+- **GET /api/view/vehicles/<vehicle_id>**: Retrieve details of a specific vehicle.
+- **GET /api/view/visitors**: Retrieve all visitors.
+- **GET /api/view/visitors/<visitor_id>**: Retrieve details of a specific visitor.
+
+### OCR-based Updates
+- **POST /api/update_user_by_ocr**: Update user information using OCR.
+- **POST /api/update_visitor_by_ocr**: Update visitor information using OCR.
+
+### Company-specific Details
+- **GET /api/view/visitors/company/<user_id>**: Retrieve visitors of a specific company.
+- **GET /api/view/staffs/company/<user_id>**: Retrieve staffs of a specific company.
+
+### Admin Users View
+- **GET /api/view/admin_users**: Retrieve all admin users.
+
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request with any improvements or feature additions.
+
 ## Frontend Usage
 
 Explain how to use the APIs in the frontend application.
