@@ -105,6 +105,7 @@ class UserDetailResource(Resource):
         else:
             return {'error': 'User not found'}, 404
         
+
 class LoginResource(Resource):
     def post(self):
         data = request.get_json()
@@ -113,13 +114,19 @@ class LoginResource(Resource):
 
         user = User.query.filter_by(username=username).first()
 
-        if user and user.check_password(password):
-            session['user_id'] = user.id
-            session['role'] = user.role
-
-            return {'Sucess': 'Login Sucessfull'}, user.role  
+        if user:
+            print("User found:", user.username)  # Debug output
+            if user.check_password(password):
+                print("Password matched")  # Debug output
+                session['user_id'] = user.id
+                session['role'] = user.role
+                return {'success': 'Login successful', 'role': user.role}, 200
+            else:
+                print("Password mismatch")  # Debug output
         else:
-            return {'error': 'Invalid username or password'}, 401
+            print("User not found")  # Debug output
+
+        return {'error': 'Invalid username or password'}, 401
 
 
 class ViewUsersResource(Resource):

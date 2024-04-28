@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(form);
 
-        fetch('/api/users', {
+        fetch('/api/auth', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
