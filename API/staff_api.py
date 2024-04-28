@@ -5,7 +5,7 @@ from models import staff_user
 from extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
-from API.auth import login_required, role_required , get_user_id, get_tax_number
+from API.auth import login_required, role_required , validate_email
 
 
 from flask import jsonify
@@ -34,6 +34,8 @@ class StaffUserResource(Resource):
         image_path = data.get('image_path')
 
         # Validate input formats if needed
+        if not validate_email(staff_email):
+            return {'error': 'Invalid company email format'}, 400
 
         # Check if username already exists
         existing_user = staff_user.query.filter_by(username=username).first()

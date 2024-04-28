@@ -13,7 +13,7 @@ from API.auth import login_required, role_required, get_user_id, get_com_no
 class VisitorResource(Resource):
 
     @login_required
-    @role_required(['super_admin', 'admin' 'staff'])
+    @role_required(['super_admin', 'admin', 'staff'])
     def post(self):
         data = request.get_json()
         full_name = data.get('full_name')
@@ -25,7 +25,7 @@ class VisitorResource(Resource):
         time_in = data.get('time_in')
         badge_issued = data.get('badge_issued')
 
-        user_id =get_user_id()
+        user_id = get_user_id()
         com_no = get_com_no(user_id)
 
         new_visitor = Visitor(
@@ -47,13 +47,13 @@ class VisitorResource(Resource):
 
 
 class VisitorDetailResource(Resource):
+
     @login_required
-    @role_required(['super_admin', 'admin' 'staff'])
+    @role_required(['super_admin', 'admin', 'staff'])
     def put(self, visitor_id):
         data = request.get_json()
         visitor = Visitor.query.get(visitor_id)
         if visitor:
-            # Update visitor fields with data from JSON
             for key, value in data.items():
                 setattr(visitor, key, value)
 
@@ -63,9 +63,8 @@ class VisitorDetailResource(Resource):
             return {'error': 'Visitor not found'}, 404
         
     @login_required
-    @role_required(['super_admin', 'admin' 'staff'])
+    @role_required(['super_admin', 'admin', 'staff'])
     def delete(self, visitor_id):
-        
         visitor = Visitor.query.get(visitor_id)
         if visitor:
             db.session.delete(visitor)
@@ -75,9 +74,9 @@ class VisitorDetailResource(Resource):
             return {'error': 'Visitor not found'}, 404
         
 
-
 class ViewVisitorsResource(Resource):
-    @role_required(['super_admin', 'admin' 'staff'])
+
+    @role_required(['super_admin', 'admin', 'staff'])
     def get(self):
         visitors = Visitor.query.all()
         visitor_list = [{'id': visitor.id, 'full_name': visitor.full_name, 'id_card_number': visitor.id_card_number, 'date_of_birth': visitor.date_of_birth} for visitor in visitors]
@@ -85,7 +84,8 @@ class ViewVisitorsResource(Resource):
 
 
 class ViewVisitorDetailResource(Resource):
-    @role_required(['super_admin', 'admin' 'staff'])
+
+    @role_required(['super_admin', 'admin', 'staff'])
     def get(self, visitor_id):
         visitor = Visitor.query.get(visitor_id)
         if visitor:
@@ -95,36 +95,28 @@ class ViewVisitorDetailResource(Resource):
             return {'error': 'Visitor not found'}, 404
 
 
-
 class UpdateVisitorByOCRResource(Resource):
 
     @login_required
-    @role_required(['super_admin', 'admin' 'staff'])
+    @role_required(['super_admin', 'admin', 'staff'])
     def post(self):
-        # Ensure that the request contains a file
         if 'file' not in request.files:
             return {'error': 'No file provided'}, 400
 
         file = request.files['file']
 
-        # Ensure that the file is an image
         if file.filename == '':
             return {'error': 'No file selected'}, 400
         if file and allowed_file(file.filename):
             try:
-                # Read the image file and perform OCR using Tesseract
                 image = Image.open(file)
                 text = pytesseract.image_to_string(image)
 
-                # Extract relevant information from OCR result
-                # For example, assuming OCR result contains username and password
-                # You may need to adjust this based on your OCR result format
                 username, password = process_ocr_result(text)
 
-                # Update user information in the database
                 visitor = Visitor.query.filter_by(username=username).first()
                 if visitor:
-                    visitor(password)  # Assuming password update is required
+                    visitor.password = password
                     db.session.commit()
                     return {'message': 'User information updated by OCR scan'}, 200
                 else:
@@ -136,14 +128,12 @@ class UpdateVisitorByOCRResource(Resource):
         
 
 class VisitorsByCompanyResource(Resource):
+
     def get(self, user_id):
-        # Query the database to retrieve visitors based on com_no
         com_no = get_com_no(user_id)
         visitors = Visitor.query.filter_by(com_no=com_no).all()
 
-        # Check if visitors were found
         if visitors:
-            # Serialize the visitor data
             visitor_list = [{
                 'id': visitor.id,
                 'full_name': visitor.full_name,
@@ -156,8 +146,6 @@ class VisitorsByCompanyResource(Resource):
                 'badge_issued': visitor.badge_issued
             } for visitor in visitors]
 
-            # Return the serialized visitor data as JSON
             return jsonify(visitor_list), 200
         else:
-            # Return a message indicating no visitors were found for the given company number
             return {'message': 'No visitors found for company number {}'.format(com_no)}, 404
