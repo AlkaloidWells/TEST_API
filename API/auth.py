@@ -6,7 +6,7 @@ from functools import wraps
 from flask import abort
 from flask_login import current_user
 from extentions import db
-
+import re
 
 
 ADMIN_DASHBOARD_URL = '/admin_dashboard'
@@ -60,6 +60,16 @@ def get_com_no(user_id):
     else:
         return None 
 
+
+
+
+def validate_email(email):
+    # Regular expression pattern for email validation
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+
+
+
 class UserResource(Resource):
     def post(self):
         data = request.get_json()
@@ -106,15 +116,8 @@ class LoginResource(Resource):
         if user and user.check_password(password):
             session['user_id'] = user.id
             session['role'] = user.role
-            
-            if user.role == 'admin':
-                return {'message': 'Admin logged in successfully', 'redirect_url': ADMIN_DASHBOARD_URL}, 200
-            elif user.role == 'user':
-                return {'message': 'User logged in successfully', 'redirect_url': USER_DASHBOARD_URL}, 200
-            elif user.role == 'super_admin':
-                return {'message': 'Super admin logged in successfully', 'redirect_url': SUPER_ADMIN_DASHBOARD_URL}, 200
-            elif user.role == 'staff':
-                return {'message': 'Staff logged in successfully', 'redirect_url': STAFF_DASHBOARD_URL}, 200
+
+            return {'Sucess': 'Login Sucessfull'}, user.role  
         else:
             return {'error': 'Invalid username or password'}, 401
 
@@ -122,14 +125,15 @@ class LoginResource(Resource):
 class ViewUsersResource(Resource):
     def get(self):
         users = User.query.all()
-        user_list = [{'id': user.id, 'username': user.username, 'role': user.role, 'image_path': user.image_path} for user in users]
-        return jsonify(user_list), 200
+        user_list = [{'id': user.id, 'username': user.username, 'role': user.role} for user in users]
+        return {'users': user_list}, 200
+
 
 class ViewUserDetailResource(Resource):
     def get(self, user_id):
         user = User.query.get(user_id)
         if user:
             user_info = {'id': user.id, 'username': user.username, 'role': user.role, 'image_path': user.image_path}
-            return jsonify(user_info), 200
+            return {'user': user_info}, 200
         else:
             return {'error': 'User not found'}, 404
