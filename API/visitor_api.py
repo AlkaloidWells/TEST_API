@@ -100,31 +100,52 @@ class UpdateVisitorByOCRResource(Resource):
     @login_required
     @role_required(['super_admin', 'admin', 'staff'])
     def post(self):
-        if 'file' not in request.files:
-            return {'error': 'No file provided'}, 400
+        # Ensure that two files are provided
+        if 'file1' not in request.files or 'file2' not in request.files:
+            return {'error': 'Two files are required'}, 400
 
-        file = request.files['file']
+        file1 = request.files['file1']
+        file2 = request.files['file2']
 
-        if file.filename == '':
-            return {'error': 'No file selected'}, 400
-        if file and allowed_file(file.filename):
-            try:
-                image = Image.open(file)
-                text = pytesseract.image_to_string(image)
-
-                username, password = process_ocr_result(text)
-
-                visitor = Visitor.query.filter_by(username=username).first()
-                if visitor:
-                    visitor.password = password
-                    db.session.commit()
-                    return {'message': 'User information updated by OCR scan'}, 200
-                else:
-                    return {'error': 'User not found'}, 404
-            except Exception as e:
-                return {'error': str(e)}, 500
-        else:
+        # Ensure that both files are images
+        if not all(allowed_file(file.filename) for file in [file1, file2]):
             return {'error': 'Unsupported file type'}, 400
+
+        try:
+            # Process the first image
+            text1 = self.process_image(file1)
+            # Process the second image
+            text2 = self.process_image(file2)
+
+            # Extract relevant information from OCR results
+            # Assuming process_ocr_result returns relevant information for updating Visitor
+            visitor_info1 = process_ocr_result(text1)
+            visitor_info2 = process_ocr_result(text2)
+
+            # Ensure that the extracted information from both images match
+            if visitor_info1 != visitor_info2:
+                return {'error': 'Information extracted from the two images do not match'}, 400
+
+            # Find the visitor in the database
+            visitor = Visitor.query.filter_by(username=visitor_info1['username']).first()
+            if visitor:
+                # Update visitor information
+                visitor.full_name = visitor_info1['full_name']
+                visitor.id_card_number = visitor_info1['id_card_number']
+                # Update other fields similarly as needed
+                db.session.commit()
+                return {'message': 'Visitor information updated successfully'}, 200
+            else:
+                return {'error': 'Visitor not found in the database'}, 404
+        except Exception as e:
+            return {'error': str(e)}, 500
+
+    def process_image(self, file):
+        # Open the image and perform OCR using Tesseract
+        image = Image.open(file)
+        text = pytesseract.image_to_string(image)
+        return text
+
         
 
 class VisitorsByCompanyResource(Resource):
