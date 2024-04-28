@@ -84,3 +84,33 @@ class AdminUserDetailResource(Resource):
             return {'message': 'Admin user deleted successfully'}, 200
         else:
             return {'error': 'Admin user not found'}, 404
+
+
+class AdminUsersViewResource(Resource):
+    @login_required
+    @role_required(['super_admin'])
+    def get(self):
+        admin_users = admin_user.query.all()
+
+        if admin_users:
+            admin_user_list = [{
+                'id': user.id,
+                'username': user.username,
+                'role': user.role,
+                'company_name': user.company_name,
+                'tax_number': user.tax_number,
+                'industry': user.industry,
+                'company_size': user.company_size,
+                'company_tel': user.company_tel,
+                'company_email': user.company_email,
+                'company_gps': user.company_gps,
+                'company_address': user.company_address,
+                'managed_by': user.managed_by,
+                'manager_role': user.manager_role,
+                'manager_tel': user.manager_tel,
+                'manager_email': user.manager_email
+            } for user in admin_users]
+
+            return jsonify(admin_user_list), 200
+        else:
+            return {'message': 'No admin users found'}, 404

@@ -5,7 +5,7 @@ from models import staff_user
 from extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
-from API.auth import login_required, role_required , validate_email
+from API.auth import login_required, role_required , validate_email, get_com_no
 
 
 from flask import jsonify
@@ -64,7 +64,7 @@ class StaffUserResource(Resource):
 
 class StaffUserDetailResource(Resource):
     @login_required
-    @role_required(['super_admin', 'admin'])
+    @role_required(['super_admin', 'admin', 'staff'])
     def delete(self, user_id):
         try:
             staff_user_obj = staff_user.query.get(user_id)
@@ -77,3 +77,26 @@ class StaffUserDetailResource(Resource):
         except Exception as e:
             db.session.rollback()
             return {'error': 'An error occurred while processing the request'}, 500
+
+
+class StaffByCompanyResource(Resource):
+    @login_required
+    @role_required(['super_admin', 'admin'])
+    def get(self, user_id):
+        com_no = get_com_no(user_id)
+        staffs = staff_user.query.filter_by(com_no=com_no).all()
+
+        if staffs:
+            staff_list = [{
+                'id': staff.id,
+                'full_name': staff.full_name,
+                'position': staff.position,
+                'department': staff.department,
+                'contact_details': staff.contact_details,
+                'hire_date': staff.hire_date,
+                'salary': staff.salary
+            } for staff in staffs]
+
+            return jsonify(staff_list), 200
+        else:
+            return {'message': 'No staffs found for company number {}'.format(com_no)}, 404
