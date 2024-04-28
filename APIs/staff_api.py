@@ -17,7 +17,6 @@ class StaffUserResource(Resource):
         username = data.get('username')
         password = data.get('password')
         role = 'staff'  # Fixed role for staff users
-        image_path = data.get('image_path')
         full_name = data.get('full_name')
         com_no = data.get('com_no')
         staff_email = data.get('staff_email')
@@ -25,6 +24,7 @@ class StaffUserResource(Resource):
         staff_role = data.get('staff_role')
         staff_home_address = data.get('staff_home_address')
         staff_department = data.get('staff_department')
+        image_path = data.get('image_path')
 
         new_staff_user = staff_user(username=username, role=role, image_path=image_path,
                                     full_name=full_name, com_no=com_no, staff_email=staff_email,

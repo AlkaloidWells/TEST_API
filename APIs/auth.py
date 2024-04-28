@@ -38,6 +38,22 @@ def login_required(f):
     return decorated_function
 
 
+def get_user_role():
+    return current_user.role
+
+
+def get_user_id():
+    return current_user.id
+
+
+def get_user_com_registration_number(user_id):
+    user = User.query.get(user_id)
+    if user:
+        return user.com_registration_number
+    else:
+        return None 
+
+
 class UserResource(Resource):
     def post(self):
         data = request.get_json()
