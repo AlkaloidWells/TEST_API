@@ -37,6 +37,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 @login_required
 def get_user_role():
     return current_user.role

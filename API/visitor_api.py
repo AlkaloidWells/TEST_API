@@ -133,3 +133,31 @@ class UpdateVisitorByOCRResource(Resource):
                 return {'error': str(e)}, 500
         else:
             return {'error': 'Unsupported file type'}, 400
+        
+
+class VisitorsByCompanyResource(Resource):
+    def get(self, user_id):
+        # Query the database to retrieve visitors based on com_no
+        com_no = get_com_no(user_id)
+        visitors = Visitor.query.filter_by(com_no=com_no).all()
+
+        # Check if visitors were found
+        if visitors:
+            # Serialize the visitor data
+            visitor_list = [{
+                'id': visitor.id,
+                'full_name': visitor.full_name,
+                'id_card_number': visitor.id_card_number,
+                'date_of_birth': visitor.date_of_birth,
+                'address': visitor.address,
+                'contact_details': visitor.contact_details,
+                'purpose_of_visit': visitor.purpose_of_visit,
+                'time_in': visitor.time_in,
+                'badge_issued': visitor.badge_issued
+            } for visitor in visitors]
+
+            # Return the serialized visitor data as JSON
+            return jsonify(visitor_list), 200
+        else:
+            # Return a message indicating no visitors were found for the given company number
+            return {'message': 'No visitors found for company number {}'.format(com_no)}, 404

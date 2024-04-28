@@ -63,6 +63,13 @@ api.add_resource(ViewVisitorDetailResource, '/api/view_visitors/<int:visitor_id>
 api.add_resource(UpdateVisitorByOCRResource, '/api/update_user_by_ocr')
 api.add_resource(UpdateViruleByOCRResource, '/api/update_visitor_by_ocr')
 
+# Register the VisitorsByCompanyResource with the '/api/visitors/<user_id>' endpoint
+api.add_resource(VisitorsByCompanyResource, '/api/visitors/<int:user_id>')
+# Register the VehiclesByCompanyResource with the '/api/vehicles/<user_id>' endpoint
+api.add_resource(VehiclesByCompanyResource, '/api/vehicles/<int:user_id>')
+
+
+
 
 
 if __name__ == '__main__':

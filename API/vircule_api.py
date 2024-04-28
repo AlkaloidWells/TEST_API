@@ -81,6 +81,7 @@ class ViewVehiclesResource(Resource):
 
 
 class ViewVehicleDetailResource(Resource):
+    @login_required
     @role_required(['super_admin', 'admin' 'staff'])
     def get(self, vehicle_id):
         vehicle = Vehicle.query.get(vehicle_id)
@@ -93,8 +94,39 @@ class ViewVehicleDetailResource(Resource):
 
 
 class UpdateViruleByOCRResource(Resource):
+    @login_required
     @role_required(['super_admin', 'admin' 'staff'])
     def post(self):
         # Process OCR scan and update visitor information
         # Replace this with your OCR processing logic
         return {'message': 'Visitor information updated by OCR scan'}, 200
+    
+
+class VehiclesByCompanyResource(Resource):
+    @login_required
+    @role_required(['super_admin', 'admin' 'staff'])
+    def get(self, user_id):
+        
+        com_no = get_com_no(user_id)
+        vehicles = Vehicle.query.filter_by(com_no=com_no).all()
+
+        # Check if vehicles were found
+        if vehicles:
+            # Serialize the vehicle data
+            vehicle_list = [{
+                'id': vehicle.id,
+                'plate_number': vehicle.plate_number,
+                'make': vehicle.make,
+                'model': vehicle.model,
+                'color': vehicle.color,
+                'owner_details': vehicle.owner_details,
+                'entry_time': vehicle.entry_time,
+                'exit_time': vehicle.exit_time,
+                'flagged_as_suspicious': vehicle.flagged_as_suspicious
+            } for vehicle in vehicles]
+
+            # Return the serialized vehicle data as JSON
+            return jsonify(vehicle_list), 200
+        else:
+            # Return a message indicating no vehicles were found for the given company number
+            return {'message': 'No vehicles found for company number {}'.format(com_no)}, 404
