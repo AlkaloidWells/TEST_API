@@ -1,8 +1,8 @@
 from flask import redirect, request, url_for
 from flask import request, jsonify, session
 from flask_restful import Resource
-from models import Visitor
-from extentions import db
+from models.models import Visitor
+from utilites.extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
 import pytesseract

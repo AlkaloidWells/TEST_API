@@ -1,11 +1,11 @@
 from flask import redirect, request, url_for
 from flask import request, jsonify, session
 from flask_restful import Resource
-from models import User
+from models.models import User
 from functools import wraps
 from flask import abort
 from flask_login import current_user
-from extentions import db
+from utilites.extentions import db
 import re
 
 

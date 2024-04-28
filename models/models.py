@@ -2,8 +2,8 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask 
-from extentions import db, migrate
-from config import Config
+from utilites.extentions import db, migrate
+from utilites.config import Config
 # Import db from the app module
 
 

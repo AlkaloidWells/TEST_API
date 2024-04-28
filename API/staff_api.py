@@ -1,8 +1,8 @@
 from flask import redirect, request, url_for
 from flask import request, jsonify, session
 from flask_restful import Resource
-from models import staff_user 
-from extentions import db
+from models.models import staff_user 
+from utilites.extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
 from API.auth import login_required, role_required , validate_email, get_com_no
