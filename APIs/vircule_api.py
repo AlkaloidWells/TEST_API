@@ -5,14 +5,14 @@ from models import  Vehicle
 from extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
-from APIs.auth import login_required, role_required
+from APIs.auth import login_required, role_required, get_user_id, get_com_no
 
 class VehicleResource(Resource):
     @login_required
-    @role_required('user')
+    @role_required(['super_admin', 'admin' 'staff'])
     def post(self):
         data = request.get_json()
-        com_no = data.get('com_no')
+        
         plate_number = data.get('plate_number')
         make = data.get('make')
         model = data.get('model')
@@ -21,6 +21,9 @@ class VehicleResource(Resource):
         entry_time = data.get('entry_time')
         exit_time = data.get('exit_time')
         flagged_as_suspicious = data.get('flagged_as_suspicious', False)
+        
+        user_id =get_user_id()
+        com_no = get_com_no(user_id)
 
         new_vehicle = Vehicle(
             com_no=com_no,
@@ -42,7 +45,7 @@ class VehicleResource(Resource):
 
 class VehicleDetailResource(Resource):
     @login_required
-    @role_required('super')
+    @role_required(['super_admin', 'admin' 'staff'])
     def put(self, vehicle_id):
         data = request.get_json()
         vehicle = Vehicle.query.get(vehicle_id)
@@ -57,7 +60,7 @@ class VehicleDetailResource(Resource):
             return {'error': 'Vehicle not found'}, 404
 
     @login_required
-    @role_required('user')
+    @role_required(['super_admin', 'admin' 'staff'])
     def delete(self, vehicle_id):
         vehicle = Vehicle.query.get(vehicle_id)
         if vehicle:
@@ -70,6 +73,7 @@ class VehicleDetailResource(Resource):
 
 
 class ViewVehiclesResource(Resource):
+    @role_required(['super_admin', 'admin' 'staff'])
     def get(self):
         vehicles = Vehicle.query.all()
         vehicle_list = [{'id': vehicle.id, 'plate_number': vehicle.plate_number, 'make': vehicle.make, 'model': vehicle.model, 'color': vehicle.color} for vehicle in vehicles]
@@ -77,6 +81,7 @@ class ViewVehiclesResource(Resource):
 
 
 class ViewVehicleDetailResource(Resource):
+    @role_required(['super_admin', 'admin' 'staff'])
     def get(self, vehicle_id):
         vehicle = Vehicle.query.get(vehicle_id)
         if vehicle:
@@ -88,6 +93,7 @@ class ViewVehicleDetailResource(Resource):
 
 
 class UpdateViruleByOCRResource(Resource):
+    @role_required(['super_admin', 'admin' 'staff'])
     def post(self):
         # Process OCR scan and update visitor information
         # Replace this with your OCR processing logic

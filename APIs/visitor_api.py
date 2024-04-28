@@ -6,17 +6,16 @@ from extentions import db
 from PIL import Image
 from Modules.ocr.ocr import *
 import pytesseract
-from APIs.auth import login_required, role_required
+from APIs.auth import login_required, role_required, get_user_id, get_com_no
 
 
 
 class VisitorResource(Resource):
 
     @login_required
-    @role_required('user')
+    @role_required(['super_admin', 'admin' 'staff'])
     def post(self):
         data = request.get_json()
-        com_no = data.get('com_no')  # Add company tax_number
         full_name = data.get('full_name')
         id_card_number = data.get('id_card_number')
         date_of_birth = data.get('date_of_birth')
@@ -25,6 +24,9 @@ class VisitorResource(Resource):
         purpose_of_visit = data.get('purpose_of_visit')
         time_in = data.get('time_in')
         badge_issued = data.get('badge_issued')
+
+        user_id =get_user_id()
+        com_no = get_com_no(user_id)
 
         new_visitor = Visitor(
             com_no=com_no,
@@ -46,7 +48,7 @@ class VisitorResource(Resource):
 
 class VisitorDetailResource(Resource):
     @login_required
-    @role_required('user')
+    @role_required(['super_admin', 'admin' 'staff'])
     def put(self, visitor_id):
         data = request.get_json()
         visitor = Visitor.query.get(visitor_id)
@@ -61,7 +63,7 @@ class VisitorDetailResource(Resource):
             return {'error': 'Visitor not found'}, 404
         
     @login_required
-    @role_required('user')
+    @role_required(['super_admin', 'admin' 'staff'])
     def delete(self, visitor_id):
         
         visitor = Visitor.query.get(visitor_id)
@@ -75,6 +77,7 @@ class VisitorDetailResource(Resource):
 
 
 class ViewVisitorsResource(Resource):
+    @role_required(['super_admin', 'admin' 'staff'])
     def get(self):
         visitors = Visitor.query.all()
         visitor_list = [{'id': visitor.id, 'full_name': visitor.full_name, 'id_card_number': visitor.id_card_number, 'date_of_birth': visitor.date_of_birth} for visitor in visitors]
@@ -82,6 +85,7 @@ class ViewVisitorsResource(Resource):
 
 
 class ViewVisitorDetailResource(Resource):
+    @role_required(['super_admin', 'admin' 'staff'])
     def get(self, visitor_id):
         visitor = Visitor.query.get(visitor_id)
         if visitor:
@@ -93,8 +97,9 @@ class ViewVisitorDetailResource(Resource):
 
 
 class UpdateVisitorByOCRResource(Resource):
+
     @login_required
-    @role_required('user')
+    @role_required(['super_admin', 'admin' 'staff'])
     def post(self):
         # Ensure that the request contains a file
         if 'file' not in request.files:

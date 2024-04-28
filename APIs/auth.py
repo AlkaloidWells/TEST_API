@@ -14,13 +14,13 @@ USER_DASHBOARD_URL = '/user_dashboard'
 SUPER_ADMIN_DASHBOARD_URL = '/super_admin_dashboard'
 STAFF_DASHBOARD_URL = '/staff_dashboard'
 
-def role_required(role):
+def role_required(roles):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            # Check if user has the required role
-            if not current_user.has_role(role):
-                # Abort with 403 Forbidden error if user does not have the required role
+            # Check if user has any of the required roles
+            if not any(current_user.has_role(role) for role in roles):
+                # Abort with 403 Forbidden error if user does not have any of the required roles
                 abort(403)
             return f(*args, **kwargs)
         return decorated_function
@@ -37,22 +37,27 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
+@login_required
 def get_user_role():
     return current_user.role
 
-
+@login_required
 def get_user_id():
     return current_user.id
 
-
-def get_user_com_registration_number(user_id):
+def get_tax_number(user_id):
     user = User.query.get(user_id)
     if user:
-        return user.com_registration_number
+        return user.tax_number
     else:
         return None 
-
+    
+def get_com_no(user_id):
+    user = User.query.get(user_id)
+    if user:
+        return user.com_on
+    else:
+        return None 
 
 class UserResource(Resource):
     def post(self):
@@ -74,7 +79,7 @@ class UserResource(Resource):
 
 class UserDetailResource(Resource):
     @login_required
-    @role_required('super_admin')
+    @role_required(['super_admin'])
     def delete(self, user_id):
         user = User.query.get(user_id)
         if user:
