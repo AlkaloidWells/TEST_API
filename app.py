@@ -69,7 +69,7 @@ api.add_resource(UpdateViruleByOCRResource, '/api/update_visitor_by_ocr')
 api.add_resource(VisitorsByCompanyResource, '/api/view/visitors/company/<int:user_id>')
 
 # Define route for retrieving staffs by company ID
-api.add_resource(StaffByCompanyResource, '/api/view/staffs/company/<int:com_no>')
+api.add_resource(StaffByCompanyResource, '/api/view/staffs/company/<int:user_id>')
 
 # Define route for retrieving all admin users
 api.add_resource(AdminUsersViewResource, '/api/view/admin_users')
