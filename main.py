@@ -8,7 +8,6 @@ from API.visitor_api import *
 from API.auth import *
 from utilites.extentions import db, migrate
 from utilites.config import Config
-from models.models import *
 
 app = Flask(__name__)
 app.config.from_object(Config)
