@@ -19,6 +19,7 @@ packaging==24.0
 pillow==10.3.0
 pkg_resources==0.0.0
 pytesseract==0.3.10
+pytz==2024.1
 six==1.16.0
 SQLAlchemy==2.0.29
 typing_extensions==4.11.0
