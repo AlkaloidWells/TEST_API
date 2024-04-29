@@ -12,14 +12,15 @@ from utilites.config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
 
+from models.models import *
+with app.app_context():
+    init_db()
 # Initialize extensions
 db.init_app(app)
 migrate.init_app(app, db)
 
 # Import models to ensure they are registered with SQLAlchemy
-from models.models import *
-with app.app_context():
-    init_db()
+
 
 # Routes
 @app.route('/')
