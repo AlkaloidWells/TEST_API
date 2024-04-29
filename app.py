@@ -9,8 +9,9 @@ from API.auth import *
 from utilites.extentions import db, migrate
 from utilites.config import Config
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.config.from_object(Config)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
 # Initialize extensions
@@ -25,7 +26,7 @@ with app.app_context():
 # Routes
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('index.html')
 
 api = Api(app)
 
@@ -77,4 +78,4 @@ api.add_resource(AdminUsersViewResource, '/api/view/admin_users')
 
 # Start the Flask application
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0",port=5000)

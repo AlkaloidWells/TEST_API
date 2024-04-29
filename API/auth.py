@@ -8,12 +8,6 @@ from flask_login import current_user
 from utilites.extentions import db
 import re
 
-
-ADMIN_DASHBOARD_URL = '/admin_dashboard'
-USER_DASHBOARD_URL = '/user_dashboard'
-SUPER_ADMIN_DASHBOARD_URL = '/super_admin_dashboard'
-STAFF_DASHBOARD_URL = '/staff_dashboard'
-
 def role_required(roles):
     def decorator(f):
         @wraps(f)
